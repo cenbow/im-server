@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+					 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+					 http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="im-broker-consumer" />
+
+    <dubbo:registry protocol="zookeeper" address="172.16.37.32:2181" group="/dubbo/im-broker" register="true"/>
+
+    <dubbo:protocol name="dubbo" port="10012" />
+
+   <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.maleyuan.im.module.core.service.BrokerService" ref="brokerService" version="1.0.0" />
+    
+    <bean id="brokerService" class="com.maleyuan.im.module.broker.service.BrokerServiceImpl">
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+
+    <bean id="sessionManager" class="com.maleyuan.im.module.broker.session.SessionManager"/>
+</beans>
